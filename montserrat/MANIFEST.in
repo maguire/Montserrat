@@ -1,0 +1,3 @@
+include montserrat/config/deployment.ini_tmpl
+recursive-include montserrat/public *
+recursive-include montserrat/templates *
