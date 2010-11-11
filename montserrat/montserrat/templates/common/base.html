@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Montserrat</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <div id="header">
+      ${self.header()}
+    </div>
+
+    <div id="content">
+      <div class="inner">
+        <div class="msg">${self.flash()}</div>
+
+        ${next.body()}
+      </div>
+    </div>
+
+    <div id="footer">
+      ${self.footer()}
+    </div>
+  </body>
+</html>
+
+<%def name="title()"></%def>
+
+<%def name="header()"></%def>
+
+<%def name="flash()"></%def>
+
+<%def name="footer()"></%def>
