@@ -6,10 +6,14 @@ from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
 from montserrat.lib.base import BaseController, Session, render
 from montserrat.model.user import User, ScholarUser, DonorUser
+from montserrat.model.profile import Profile
 
 log = logging.getLogger(__name__)
 
 class UsersController(BaseController):
+    
+    def index(self):
+        return redirect("/users/login")
 
     def new(self):
         return render("users/new.html")
@@ -25,7 +29,8 @@ class UsersController(BaseController):
         for param in request.params:
             if param == "user_type":
                  user_type = request.params[param]
-            user_dict[param] = request.params[param]
+            else :
+                user_dict[param] = request.params[param]
         
         user_dict["password"] = hashlib.md5(request.params["password"]).hexdigest()
         
@@ -35,7 +40,14 @@ class UsersController(BaseController):
             new_user = DonorUser(**user_dict)
         Session.add(new_user)
         Session.commit()
-        return redirect("/")
+        
+        if user_type== "scholar":
+           Session.add(Profile(new_user))
+           Session.commit()
+           
+        session["user"] = {"id": new_user.id, "name": "%s %s" % (new_user.firstname, new_user.lastname)}
+        session.save()
+        return redirect("/"+user_type+"/")
 
     def login(self):
         return render("users/login.html")
@@ -50,7 +62,7 @@ class UsersController(BaseController):
                 return render("users/login.html")
             session["user"] = {"id": user.id, "name": "%s %s" % (user.firstname, user.lastname)}
             session.save()
-            return redirect("/")
+            return redirect("/"+user.user_type+"/")
         else:
             return redirect("/users/login")
 
@@ -64,6 +76,8 @@ class UsersController(BaseController):
 
     
     def _find(self, username):
-        users = Session.query(User).filter(User.username.like(username+"%")).all()
-        return users[0]
-
+        try:
+            user = Session.query(User).filter(User.username==username).one()
+        except:
+            return False
+        return user

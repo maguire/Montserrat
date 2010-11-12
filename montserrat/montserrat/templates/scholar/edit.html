@@ -1,0 +1,25 @@
+
+<%inherit file="/common/base.html" />
+
+<%def name="title()">Scholar Profile Edit</%def>
+
+<div>
+    <form action="/scholar/profile_save" method="post">
+        <div>First Name</div>
+        <div>
+            <input name="firstname" value="${c.user.firstname}" />
+        </div>
+        <div>Last Name</div>
+        <div>
+            <input name="lastname" value="${c.user.lastname}" />
+        </div>
+        <div>Profile Picture</div>
+        <div>
+           <input />
+        </div>
+        <div>School</div>
+        <div>
+            <input name="school" value="${c.profile.school_id}" />
+        </div>
+    </form>
+</div>
