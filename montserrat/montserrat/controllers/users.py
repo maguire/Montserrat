@@ -5,7 +5,7 @@ import json
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
 from montserrat.lib.base import BaseController, Session, render
-from montserrat.model.user import User
+from montserrat.model.user import User, ScholarUser, DonorUser
 
 log = logging.getLogger(__name__)
 
@@ -15,14 +15,24 @@ class UsersController(BaseController):
         return render("users/new.html")
 
     def create(self):
-        for param in request.params:
-            if param == "" or param is None:
-                return render("users/register.html")
+        user = self._find(username=request.params['username'])
+        if user:
+            # The client tried to create a user that already exists
+            abort(409, '409 Conflict',
+                  headers=[('location', url('user', id=user.username))])  
+
         user_dict = {}
         for param in request.params:
+            if param == "user_type":
+                 user_type = request.params[param]
             user_dict[param] = request.params[param]
+        
         user_dict["password"] = hashlib.md5(request.params["password"]).hexdigest()
-        new_user = User(**user_dict)
+        
+        if user_type == "scholar":
+            new_user = ScholarUser(**user_dict)
+        else :
+            new_user = DonorUser(**user_dict)
         Session.add(new_user)
         Session.commit()
         return redirect("/")
@@ -52,8 +62,8 @@ class UsersController(BaseController):
             session.save()
             return redirect("/")
 
-    def find(self):
-        users = Session.query(User).filter(User.username.like(request.params["q"]+"%")).all()
-        for user in users:
-            yield user.username
+    
+    def _find(self, username):
+        users = Session.query(User).filter(User.username.like(username+"%")).all()
+        return users[0]
 

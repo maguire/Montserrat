@@ -1,9 +1,14 @@
 <%inherit file="/common/base.html" />
 
-<%def name="title()">Register on IdeaBox</%def>
+<%def name="title()">Register</%def>
 
 
 <form method="post" action="/users/create">
+  <div>
+    <div>User Type:</div>
+    <div><input type="radio" value="scholar" name="user_type" /> Scholar </div>
+    <div><input type="radio" value="donor"   name="user_type" /> Donor </div>
+  <div>
   <div>
     <div>First name:</div>
     <div><input type="text" class="input" name="firstname" /></div>
@@ -24,7 +29,6 @@
     <div>Password:</div>
     <div><input type="password" class="input" name="password" /></div>
   </div>
-  <div>
     <div><input type="submit" value="Register" /> </div>
   </div>
 </form>
