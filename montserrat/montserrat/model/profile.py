@@ -17,9 +17,5 @@ class Profile(Base):
     major = Column(Unicode(100))
     gpa = Column(Unicode(10))
 
-    def __init__(self, user, picture=False, school=False, major="", gpa=""):
+    def __init__(self, user):
         self.user_id = user.id
-        self.picture_id = picture.id if picture else ""
-        self.school_id = school.id if school else ""
-        self.major = major 
-        self.gpa = gpa
