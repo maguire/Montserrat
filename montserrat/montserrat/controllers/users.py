@@ -3,8 +3,9 @@ import json
 
 from pylons import request, response, session, tmpl_context as c, url
 from pylons.controllers.util import abort, redirect
-from montserrat.lib.base import BaseController, render
+from montserrat.lib.base import BaseController, Session, render
 from montserrat.model.user import *
+from montserrat.model.profile import Profile
 
 log = logging.getLogger(__name__)
 
@@ -31,6 +32,11 @@ class UsersController(BaseController):
                 user_dict[param] = request.params[param]
         
         new_user = create_user(user_type, user_dict)
+        
+        #new_user does not have a user id until after commit
+        if user_type == "scholar":
+            Session.add(Profile(new_user))
+            Session.commit()
           
         session["user"] = {"id": new_user.id, "name": "%s %s" % (new_user.firstname, new_user.lastname)}
         session.save()

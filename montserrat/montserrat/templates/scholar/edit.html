@@ -7,19 +7,28 @@
     <form action="/scholar/profile_save" method="post">
         <div>First Name</div>
         <div>
-            <input name="firstname" value="${c.user.firstname}" />
+            ${c.user.firstname}
         </div>
         <div>Last Name</div>
         <div>
-            <input name="lastname" value="${c.user.lastname}" />
+            ${c.user.lastname}
         </div>
-        <div>Profile Picture</div>
+        <div>Hometown</div>
         <div>
-           <input />
+           <input name="hometown" value="${c.profile.hometown}" />
         </div>
         <div>School</div>
         <div>
-            <input name="school" value="${c.profile.school_id}" />
+            <input name="school" value="${c.profile.school.name}" />
         </div>
+        <div>Major</div>
+        <div>
+            <input name="major" value="${c.profile.major}" />
+        </div>
+        <div>GPA</div>
+        <div>
+            <input name="gpa" value="${c.profile.gpa}" />
+        </div>
+        
     </form>
 </div>

@@ -4,8 +4,18 @@ p2
 (dp3
 S'_accessed_time'
 p4
-F1290058539.7852161
-sS'_creation_time'
+F1290069196.6421771
+sS'user'
 p5
+(dp6
+S'id'
+p7
+I2
+sS'name'
+p8
+VPatrick Maguire
+p9
+ssS'_creation_time'
+p10
 F1290051014.531137
 ss.

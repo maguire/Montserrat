@@ -8,7 +8,6 @@ import hashlib
 from sqlalchemy import Column, ForeignKey, orm
 from sqlalchemy.types import Integer, Unicode, DateTime, String
 from montserrat.model.meta import Base
-from montserrat.model.profile import Profile
 from montserrat.lib.base import Session 
 from datetime import datetime
 
@@ -74,16 +73,11 @@ def create_user(user_type, user_dict):
     user_dict["password"] = hashlib.md5(user_dict["password"]).hexdigest()
     if user_type == "scholar":
         new_user = ScholarUser(**user_dict)
-        #create an empty profile and add it to the db
     else :
         new_user = DonorUser(**user_dict)
     Session.add(new_user)
     Session.commit()
 
-    #new_user does not have a user id until after commit
-    if user_type == "scholar":
-        Session.add(Profile(new_user))
-        Session.commit()
     return new_user
 
 def valid_login(email, password):
