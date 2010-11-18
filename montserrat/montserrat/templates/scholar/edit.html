@@ -4,7 +4,7 @@
 <%def name="title()">Scholar Profile Edit</%def>
 
 <div>
-    <form action="/scholar/profile_save" method="post">
+    <form action="/scholar/profile_update" method="post">
         <div>First Name</div>
         <div>
             ${c.user.firstname}
@@ -19,7 +19,11 @@
         </div>
         <div>School</div>
         <div>
-            <input name="school" value="${c.profile.school.name}" />
+            % if c.profile.school :
+                <input name="school" value="${c.profile.school.name}" />
+            % else :
+                <input name="school" />
+            %endif
         </div>
         <div>Major</div>
         <div>
@@ -29,6 +33,8 @@
         <div>
             <input name="gpa" value="${c.profile.gpa}" />
         </div>
-        
+        <div>
+            <input type="submit" name="submit" value="submit" />
+        </div>
     </form>
 </div>

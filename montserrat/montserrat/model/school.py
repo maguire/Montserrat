@@ -3,7 +3,7 @@
 
 __author__="maguire"
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, orm
 from sqlalchemy.types import Integer, Unicode
 from montserrat.model.meta import Base
 from montserrat.lib.base import Session
