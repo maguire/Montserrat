@@ -23,8 +23,25 @@ def check_loggedin(fn):
 class ScholarController(BaseController):
        
     def index(self):
-        return render("scholar/index.html")
-    
+        return render("scholar/index.mako")
+
+    @check_loggedin 
+    def view_profile(self):
+        viewer = User.by_id(session['user']['id'])
+        if 'uid' in request.params:
+            profile_owner = ScholarUser.by_id(request.params['uid'])
+            if not profile_owner:
+                return "Profile ID not found"
+            profile = Profile.by_user_id(request.params['uid'])
+            c.profile_owner = profile_owner
+            c.profile = profile
+            if viewer :
+                c.viewer = viewer
+            return render("scholar/view_profile.mako")
+        else:
+            return "No Profile ID given"
+        
+            
     @check_loggedin
     def profile_edit(self):
         user = ScholarUser.by_id(session['user']['id'])
@@ -33,7 +50,7 @@ class ScholarController(BaseController):
             c.user = user
         if profile:
             c.profile = profile
-        return render("/scholar/edit.html")
+        return render("/scholar/edit_profile.mako")
     
     @check_loggedin
     def profile_update(self):
@@ -74,4 +91,4 @@ class ScholarController(BaseController):
             c.user = user
         if profile :
            c.profile = profile
-        return render("/scholar/edit_picture.html")
+        return render("/scholar/edit_picture.mako")

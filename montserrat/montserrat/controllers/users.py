@@ -15,7 +15,7 @@ class UsersController(BaseController):
         return redirect("/users/login")
 
     def new(self):
-        return render("users/new.html")
+        return render("users/new.mako")
 
     def create(self):
         user = User.by_name(username=request.params['username'])
@@ -43,12 +43,12 @@ class UsersController(BaseController):
         return redirect("/"+user_type+"/")
 
     def login(self):
-        return render("users/login.html")
+        return render("users/login.mako")
 
     def dologin(self):
         if request.params["email"] and request.params["password"]:
             user = valid_login(request.params["email"], request.params["password"])
-            if not user : return render("users/login.html")
+            if not user : return render("users/login.mako")
             session["user"] = {"id": user.id, "name": "%s %s" % (user.firstname, user.lastname)}
             session.save()
             return redirect("/"+user.user_type+"/")
