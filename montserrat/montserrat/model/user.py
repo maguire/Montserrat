@@ -3,9 +3,13 @@
 
 __author__="maguire"
 
-from sqlalchemy import Column, ForeignKey
+import hashlib
+
+from sqlalchemy import Column, ForeignKey, orm
 from sqlalchemy.types import Integer, Unicode, DateTime, String
 from montserrat.model.meta import Base
+from montserrat.model.profile import Profile
+from montserrat.lib.base import Session 
 from datetime import datetime
 
 class User(Base):
@@ -31,6 +35,22 @@ class User(Base):
         self.user_type = user_type
         self.joindate = datetime.now()  
 
+    @classmethod
+    def by_name(cls,username):
+        try:
+            user = Session.query(cls).filter(cls.username==username).one()
+        except orm.exc.NoResultFound:
+            return False
+        return user
+    
+    @classmethod
+    def by_id(cls,user_id):
+        try:
+            user = Session.query(cls).filter(cls.id==user_id).one()
+        except orm.exc.NoResultFound:
+            return False
+        return user
+
 class ScholarUser(User):
     __tablename__ = 'scholar'
     __mapper_args__ = {'polymorphic_identity': 'scholar'}
@@ -49,4 +69,29 @@ class DonorUser(User):
     def __init__(self, firstname, lastname, username, email, password):
         super(DonorUser, self).__init__(firstname, lastname, username, email, password, "donor")
 
+def create_user(user_type, user_dict):
+    
+    user_dict["password"] = hashlib.md5(user_dict["password"]).hexdigest()
+    if user_type == "scholar":
+        new_user = ScholarUser(**user_dict)
+        #create an empty profile and add it to the db
+    else :
+        new_user = DonorUser(**user_dict)
+    Session.add(new_user)
+    Session.commit()
+
+    #new_user does not have a user id until after commit
+    if user_type == "scholar":
+        Session.add(Profile(new_user))
+        Session.commit()
+    return new_user
+
+def valid_login(email, password):
+    password = hashlib.md5(password).hexdigest()
+    try:
+        user = Session.query(User).filter(User.email==email).\
+                filter(User.password==password).one()
+    except:
+        user = False
+    return user
 
