@@ -5,30 +5,30 @@
 <%def name="title()">Scholar Profile View</%def>
 
 <div>
-    <div>First Name</div>
-    <div>
-        ${c.profile_owner.firstname}
+    <div class="profile-user-info">
+    <h2>${c.profile_owner.firstname} ${c.profile_owner.lastname}</h2>
+    <table>
+        <tr>
+            <td>Hometown</td>
+            <td>${c.profile.hometown}</td>
+        </tr>
+        <tr>
+            <td>School</td>
+            <td>
+                % if c.profile.school :
+                    ${c.profile.school.name}
+                % endif
+            </td>
+        </tr>
+        <tr>
+            <td>Major</td>
+            <td>${c.profile.major}</td>
+        </tr>
+        <tr>
+            <td>GPA</td>
+            <td>${c.profile.gpa}</td>
+        </tr>
+    </table>
     </div>
-    <div>Last Name</div>
-    <div>
-        ${c.profile_owner.lastname}
-    </div>
-    <div>Hometown</div>
-    <div>
-       ${c.profile.hometown}
-    </div>
-    <div>School</div>
-    <div>
-        % if c.profile.school :
-            ${c.profile.school.name}
-        % endif
-    </div>
-    <div>Major</div>
-    <div>
-        ${c.profile.major}
-    </div>
-    <div>GPA</div>
-    <div>
-        ${c.profile.gpa}
-    </div>
+    <img src="/placeholder.jpg" style="height:250px; width:250px; margin:15px;" />
 </div>
