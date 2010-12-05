@@ -27,20 +27,20 @@ class ScholarController(BaseController):
 
     @check_loggedin 
     def view_profile(self):
-        viewer = User.by_id(session['user']['id'])
+        viewer = ScholarUser.by_id(session['user']['id'])
         if 'uid' in request.params:
             profile_owner = ScholarUser.by_id(request.params['uid'])
-            if not profile_owner:
-                return "Profile ID not found"
-            profile = Profile.by_user_id(request.params['uid'])
-            c.profile_owner = profile_owner
-            c.profile = profile
-            if viewer :
-                c.viewer = viewer
-            return render("scholar/view_profile.mako")
-        else:
-            return "No Profile ID given"
-        
+        else :
+            profile_owner = viewer
+
+        if not profile_owner:
+            return "Profile not found"
+        profile = Profile.by_user_id(profile_owner.id)
+        c.profile_owner = profile_owner
+        c.profile = profile
+        if viewer :
+            c.viewer = viewer
+        return render("scholar/view_profile.mako")
             
     @check_loggedin
     def profile_edit(self):
